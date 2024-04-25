@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -91,10 +91,33 @@ class Program
             }
 
             // command "filter" by Title
-            //else if (command.StartWith("filter"))
-            //{
+            else if (command.StartsWith("filter"))
+            {
+                string[] filterParams = command.Split(" ");
+                if (filterParams.Length <= 1)
+                {
+                    Console.WriteLine($"USAGE: filter <keyword>");
+                    continue;
+                }
 
-            //}
+                string keyword = filterParams[1];
+                var filteredTodos = todoList.Where(todo => todo.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                if (filteredTodos.Count == 0)
+                {
+                    Console.WriteLine($"No todos found containing '{keyword}'.");
+                    continue;
+                }
+                Console.WriteLine("-------------------------------------------------------------------------------------------------------");
+                Console.WriteLine($"Todos containing '{keyword}':");
+                foreach (var todo in filteredTodos)
+                {
+                    Console.WriteLine($"- {todo.Title}" +
+                                      $"{(todo.Description != null ? $" ({todo.Description})" : "")}" +
+                                      $"{(todo.DueDate != null ? $" [Due: {todo.DueDate}]" : "")}");
+                }
+                Console.WriteLine("-------------------------------------------------------------------------------------------------------");
+            }
 
 
             Console.WriteLine("Your command: {0}", command);
